@@ -29,22 +29,32 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onRegister }) =
   };
 
   return (
-    <div className="player-registration">
-      <h2>Register Players</h2>
-      <input
+    <main>
+      <div id="header">
+        <h1>Players</h1>
+        <input
         type="text"
-        placeholder="Enter player name"
+        placeholder="Enter player name..."
         value={playerName}
         onChange={(e) => setPlayerName(e.target.value)}
       />
-      <button onClick={addPlayer}>Add Player</button>
-      <div className="players-list">
-        {players.map((player, index) => (
-          <div key={index}>{player.name}</div>
-        ))}
+        <button className='add-player' onClick={addPlayer}>+</button>
       </div>
+      <div id="registration">
+        <table>
+          <tbody>
+          {players.map((player, index) => (
+              <tr key={index}>
+                  <td className="number">{index + 1}</td>
+                  <td className="name">{player.name}</td>
+              </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+      
       <button onClick={startGame}>Start Game</button>
-    </div>
+    </main>
   );
 };
 

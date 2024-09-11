@@ -13,12 +13,12 @@ interface PointsRegistrationProps {
 const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPointsUpdate }) => {
   const [roundPoints, setRoundPoints] = useState<number[]>(players.map(() => 0));
 
-  const updatePoints = (index: number, points: string) => {
+  /*const updatePoints = (index: number, points: string) => {
     const newRoundPoints = [...roundPoints];
     newRoundPoints[index] = parseInt(points, 10) || 0;
     setRoundPoints(newRoundPoints);
   };
-
+  */
   const submitRoundPoints = () => {
     const updatedPlayers = players.map((player, index) => ({
       ...player,
@@ -30,28 +30,29 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
   };
 
   return (
-    <div className="points-registration">
-      <h2>Register Points for Each Player</h2>
-      {players.map((player, index) => (
-        <div key={index} className="player-input">
-          <label>{player.name}:</label>
-          <input
-            type="number"
-            value={roundPoints[index]}
-            onChange={(e) => updatePoints(index, e.target.value)}
-          />
-        </div>
-      ))}
-      <button onClick={submitRoundPoints}>Submit Round Points</button>
-      <div className="scores">
-        <h3>Current Scores</h3>
-        {players.map((player, index) => (
-          <div key={index}>
-            {player.name}: {player.score}
-          </div>
-        ))}
+    <main>
+      <div id="header">
+        <h1>Ranking</h1>
       </div>
-    </div>
+        <div id="leaderboard">
+          <div className="ribbon"></div>
+          <table>
+            <tbody>
+              {players.map((player, index) => (
+              <tr key={index}>
+                  <td className="number">{index + 1}</td>
+                  <td className="name">{player.name}</td>
+                  <td className="points">{player.score}</td>
+                  <td className='submit'>
+                  <button className='add' onClick={submitRoundPoints}>+</button>
+                  {index + 1 == 1 && <img className="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>}
+                  </td>
+              </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+    </main>
   );
 };
 
