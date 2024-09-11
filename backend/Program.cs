@@ -1,25 +1,67 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("Games"));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddOpenApiDocument(config =>
+{
+    config.DocumentName = "GabondAPI";
+    config.Title = "GabondAPI v1";
+    config.Version = "v1";
+});
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/games", async (GameDb db) =>
+    await db.Games.ToListAsync());
+
+app.MapGet("/games/{id}", async (int id, GameDb db) =>
+    await db.Games.FindAsync(id)
+        is Game game
+            ? Results.Ok(game)
+            : Results.NotFound());
+
+app.MapGet("/games/{id}/players", async (int id, GameDb db) => 
+	await db.Games.FindAsync(id)
+		is Game game
+			? Results.Ok(game.Players)
+			: Results.NotFound()); 
+
+app.MapPost("/games", async (Game game, List<Player> players, GameDb db) =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+	game.Players = players;
+    db.games.Add(game);
+    await db.SaveChangesAsync();
 
-// app.UseHttpsRedirection();
+    return Results.Created($"/games/{game.Id}", game);
+});
 
-app.UseAuthorization();
+app.MapPut("/games/{id}", async (int id, int newScore, Player player, GameDb db) =>
+{
+    var game = await db.Games.FindAsync(id);
 
-app.MapControllers();
+    if (game is null) return Results.NotFound();
+
+	bool playerUpdated = GameService.UpdatePlayerScore(game, player, newScore)
+	if (!playerUpdated){
+		return Results.NotFound(new {Message = $"Player with name {player.Name} not found"})
+	}
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
+app.MapDelete("/games/{id}", async (int id, GameDb db) =>
+{
+    if (await db.Games.FindAsync(id) is Game game)
+    {
+        db.Games.Remove(game);
+        await db.SaveChangesAsync();
+        return Results.NoContent();
+    }
+
+    return Results.NotFound();
+});
 
 app.Run();
