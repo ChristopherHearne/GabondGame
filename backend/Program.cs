@@ -26,24 +26,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapGet("/games", async (GameDb db) =>
-    await db.Games.ToListAsync());
+    await db.Games
+        .Include(p => p.Players)
+        .ToListAsync());
 
-app.MapGet("/games/{id}", async (int id, GameDb db) =>
-    await db.Games.FindAsync(id)
+app.MapGet("/games/{id}", async (int id, GameDb db) => 
+  await db.Games.Include(p => p.Players).FirstOrDefaultAsync(p => p.Id == id)
         is Game game
             ? Results.Ok(game)
             : Results.NotFound());
-
-app.MapGet("/games/{id}/players", async (int id, GameDb db) => 
-	await db.Games.FindAsync(id)
-		is Game game
-			? Results.Ok(game.Players)
-			: Results.NotFound()); 
-
+            
 app.MapPost("/games", async (Game game, GameDb db) =>
 {
-    Console.WriteLine($"Got game: {game}");
-    Console.WriteLine($"Got players: {game.Players.Count}");
     db.Games.Add(game);
     await db.SaveChangesAsync();
 

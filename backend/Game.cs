@@ -2,7 +2,7 @@ public class Game
 {
 	public int Id { get; set; }
 	public int Code { get; set; }
-	public List<Player> Players { get; set; } = [];
+	public List<Player> Players { get; set; } = new List<Player>();
 	private int _maxPoints = 500;
 	public int MaxPoints
 	{
@@ -13,6 +13,4 @@ public class Game
 			}
 		}
 	}
-	
-	
 }

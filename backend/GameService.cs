@@ -11,7 +11,7 @@ public class GameService
         {
             return false;
         }
-        player.Score = newScore;
+        player.Score += newScore;
         return true;
     }
 }
