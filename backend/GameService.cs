@@ -7,8 +7,7 @@ public class GameService
 
     public static bool UpdatePlayerScore(Game game, Player player, int newScore)
     {
-        var player = GetPlayerByName(game, player);
-        if (player == null)
+        if (GetPlayerByName(game, player) == null)
         {
             return false;
         }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("Games"));
+builder.Services.AddDbContext<GameDb>(opt => opt.UseInMemoryDatabase("Games"));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -12,6 +12,18 @@ builder.Services.AddOpenApiDocument(config =>
     config.Version = "v1";
 });
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseOpenApi();
+    app.UseSwaggerUi(config =>
+    {
+        config.DocumentTitle = "GabondAPI";
+        config.Path = "/swagger";
+        config.DocumentPath = "/swagger/{documentName}/swagger.json";
+        config.DocExpansion = "list";
+    });
+}
 
 app.MapGet("/games", async (GameDb db) =>
     await db.Games.ToListAsync());
@@ -28,10 +40,11 @@ app.MapGet("/games/{id}/players", async (int id, GameDb db) =>
 			? Results.Ok(game.Players)
 			: Results.NotFound()); 
 
-app.MapPost("/games", async (Game game, List<Player> players, GameDb db) =>
+app.MapPost("/games", async (Game game, GameDb db) =>
 {
-	game.Players = players;
-    db.games.Add(game);
+    Console.WriteLine($"Got game: {game}");
+    Console.WriteLine($"Got players: {game.Players.Count}");
+    db.Games.Add(game);
     await db.SaveChangesAsync();
 
     return Results.Created($"/games/{game.Id}", game);
@@ -42,11 +55,12 @@ app.MapPut("/games/{id}", async (int id, int newScore, Player player, GameDb db)
     var game = await db.Games.FindAsync(id);
 
     if (game is null) return Results.NotFound();
-
-	bool playerUpdated = GameService.UpdatePlayerScore(game, player, newScore)
-	if (!playerUpdated){
-		return Results.NotFound(new {Message = $"Player with name {player.Name} not found"})
+    
+	bool playerUpdated = GameService.UpdatePlayerScore(game, player, newScore);
+	if (!playerUpdated) {
+		return Results.NotFound(new {Message = $"Player with name {player.Name} not found"});
 	}
+    
     await db.SaveChangesAsync();
 
     return Results.NoContent();
