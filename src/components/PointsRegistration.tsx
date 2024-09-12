@@ -33,7 +33,6 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
         <h1>Ranking</h1>
       </div>
         <div id="leaderboard">
-          <div className="ribbon"></div>
           <table>
             <tbody>
               {players.map((player, index) => (
@@ -43,7 +42,6 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
                   <td className="points">{player.score}</td>
                   <td className='submit'>
                   <button className='add' onClick={() => handlePointRegistration(player)}>+</button>
-                  {index + 1 == 1 && <img className="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>}
                   </td>
               </tr> 
               ))}

@@ -17,6 +17,7 @@
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	margin-left: 1rem; 
   }
   
   .gold-medal {
@@ -24,12 +25,7 @@
 	margin-left: 2.4rem;
   }
 
-  .ribbon {
-	width: 100%;
-	height: 5rem;
-	background-color: #5c5be5;
-	position: absolute;
-  }
+
   
 
   .add{
@@ -43,20 +39,25 @@
 	border-bottom: 0.2rem solid #3838b8;
 	border-radius: 2rem;
 	cursor: pointer;
+	margin-left: 2rem; 
   }
 
-  .rank-row{
-	height: 5rem; 
+  .rank-row:nth-child(1) .player-number {
+	color: #FFD700; 
   }
 
-  .rank-row:first-child:hover{
-	background-color: #5c5be5;
-	transform: scale(1.1);
+  .rank-row:nth-child(2) .player-number {
+	color: #808080; 
   }
 
-  tr:nth-child(1) {
-	color: #fff;
+  .rank-row:nth-child(3) .player-number {
+	color: #CD7F32;
   }
+
+  .rank-row:nth-child(odd) {
+	background-color: #E6E6E6;
+  }
+
 
   .rank-row:not(first-child):hover{
 	  background-color: #fff;

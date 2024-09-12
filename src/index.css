@@ -32,6 +32,7 @@ h1 {
   color: #141a39;
   text-transform: uppercase;
   cursor: default;
+  text-align: center; 
 }
 
 table {
