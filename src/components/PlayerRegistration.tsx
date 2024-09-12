@@ -46,7 +46,7 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onRegister }) =
         <table>
           <tbody>
           {players.map((player, index) => (
-              <tr key={index}>
+              <tr className="player-row" key={index}>
                   <td className="reg-number">{index + 1}</td>
                   <td className="reg-name">{player.name}</td>
               </tr>

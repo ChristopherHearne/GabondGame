@@ -37,7 +37,7 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
           <table>
             <tbody>
               {players.map((player, index) => (
-              <tr key={index}>
+              <tr className="rank-row" key={index}>
                   <td className="player-number">{index + 1}</td>
                   <td className="player-name">{player.name}</td>
                   <td className="points">{player.score}</td>
