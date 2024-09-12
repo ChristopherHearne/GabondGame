@@ -1,4 +1,4 @@
-
+import '../styles/StartPage.css'
 interface StartPageProps {
   onStart: () => void;
 }

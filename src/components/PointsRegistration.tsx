@@ -1,5 +1,6 @@
 import { useState } from 'react'
-
+import PopupForm from './PointsPopup';
+import '../styles/PointsRegistration.css'
 interface Player {
   name: string;
   score: number;
@@ -11,23 +12,20 @@ interface PointsRegistrationProps {
 }
 
 const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPointsUpdate }) => {
-  const [roundPoints, setRoundPoints] = useState<number[]>(players.map(() => 0));
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  /*const updatePoints = (index: number, points: string) => {
-    const newRoundPoints = [...roundPoints];
-    newRoundPoints[index] = parseInt(points, 10) || 0;
-    setRoundPoints(newRoundPoints);
+  const submitRoundPoints = (points: number) => {
+    if (selectedPlayer) {
+      const updatedPlayers = players.map ((p) => p.name === selectedPlayer.name ? {...p, score: p.score + points} : p); 
+      onPointsUpdate([...updatedPlayers].sort((a, b) => a.score -  b.score))
+    }
   };
-  */
-  const submitRoundPoints = () => {
-    const updatedPlayers = players.map((player, index) => ({
-      ...player,
-      score: player.score + roundPoints[index]
-    }));
 
-    onPointsUpdate(updatedPlayers);
-    setRoundPoints(players.map(() => 0)); // Reset round points for next round
-  };
+  const handlePointRegistration = (player: Player) => {
+    setSelectedPlayer(player);
+    setIsPopupOpen(true);
+  }
 
   return (
     <main>
@@ -40,17 +38,22 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
             <tbody>
               {players.map((player, index) => (
               <tr key={index}>
-                  <td className="number">{index + 1}</td>
-                  <td className="name">{player.name}</td>
+                  <td className="player-number">{index + 1}</td>
+                  <td className="player-name">{player.name}</td>
                   <td className="points">{player.score}</td>
                   <td className='submit'>
-                  <button className='add' onClick={submitRoundPoints}>+</button>
+                  <button className='add' onClick={() => handlePointRegistration(player)}>+</button>
                   {index + 1 == 1 && <img className="gold-medal" src="https://github.com/malunaridev/Challenges-iCodeThis/blob/master/4-leaderboard/assets/gold-medal.png?raw=true" alt="gold medal"/>}
                   </td>
-              </tr>
+              </tr> 
               ))}
             </tbody>
           </table>
+          <PopupForm
+            isOpen={isPopupOpen}
+            onClose={() => setIsPopupOpen(false)}
+            onSubmit={submitRoundPoints}
+          />
         </div>
     </main>
   );

@@ -1,0 +1,28 @@
+#header {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 2.5rem 2rem;
+}
+
+.add-player{
+	width: 12%;
+}
+
+#registration tr{
+	color: black; 
+}
+
+.reg-number {
+	width: 1rem;
+	font-size: 2.2rem;
+	font-weight: bold;
+	text-align: left;
+  }
+  
+.reg-name {
+	text-align: left;
+	font-size: 1.2rem;
+}
+  

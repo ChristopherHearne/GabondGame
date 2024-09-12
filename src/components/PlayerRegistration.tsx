@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import '../styles/PlayerRegistration.css';
+
 
 interface Player {
   name: string;
@@ -45,8 +47,8 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onRegister }) =
           <tbody>
           {players.map((player, index) => (
               <tr key={index}>
-                  <td className="number">{index + 1}</td>
-                  <td className="name">{player.name}</td>
+                  <td className="reg-number">{index + 1}</td>
+                  <td className="reg-name">{player.name}</td>
               </tr>
               ))}
           </tbody>
