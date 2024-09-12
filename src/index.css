@@ -28,7 +28,6 @@ main {
 }
 
 h1 {
-  font-family: "Rubik", sans-serif;
   font-size: 1.7rem;
   color: #141a39;
   text-transform: uppercase;
@@ -79,7 +78,6 @@ td {
 button {
   width: 11rem;
   height: 3rem;
-  font-family: "Rubik", sans-serif;
   font-size: 1.3rem;
   color: #fff;
   text-transform: uppercase;
@@ -92,7 +90,6 @@ button {
 
 input{
   font-size: 1.1rem;
-  font-family: "Rubik", "sans-serif";
   padding: 0.5rem; 
   border-radius: 4px; 
   outline: 0; 
