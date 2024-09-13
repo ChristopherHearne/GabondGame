@@ -35,8 +35,8 @@ const PopupForm: React.FC<PopupFormProps> = ({ isOpen, onClose, onSubmit}) => {
             />
           </label>
           <div className="popup-actions">
-            <button type="submit">Submit</button>
-            <button type="button" onClick={onClose}>
+            <button type="submit" className='add-points'>+</button>
+            <button type="button" onClick={onClose} className='cancel'>
               Cancel
             </button>
           </div>

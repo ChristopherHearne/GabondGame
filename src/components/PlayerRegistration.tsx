@@ -5,6 +5,7 @@ import '../styles/PlayerRegistration.css';
 interface Player {
   name: string;
   score: number;
+  roundScore: string; 
 }
 
 interface PlayerRegistrationProps {
@@ -17,7 +18,7 @@ const PlayerRegistration: React.FC<PlayerRegistrationProps> = ({ onRegister }) =
 
   const addPlayer = () => {
     if (playerName.trim() !== '') {
-      setPlayers([...players, { name: playerName, score: 0 }]);
+      setPlayers([...players, { name: playerName, score: 0, roundScore:'' }]);
       setPlayerName('');
     }
   };

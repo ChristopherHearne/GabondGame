@@ -6,6 +6,7 @@ import PointsRegistration from './PointsRegistration';
 interface Player {
   name: string;
   score: number;
+  roundScore: string;
 }
 
 const App: React.FC = () => {

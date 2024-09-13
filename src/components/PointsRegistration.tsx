@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PopupForm from './PointsPopup';
 import '../styles/PointsRegistration.css'
 interface Player {
   name: string;
   score: number;
+  roundScore: string;
 }
 
 interface PointsRegistrationProps {
@@ -14,11 +15,21 @@ interface PointsRegistrationProps {
 const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPointsUpdate }) => {
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [displayedScores, setDisplayedScores] = useState<{ [key: string]: number }>({});
+
+  useEffect(() => {
+    const scores: { [key: string]: number } = {};
+    players.forEach((player) => {
+      scores[player.name] = player.score;
+    });
+    setDisplayedScores(scores);
+  }, [players]);
 
   const submitRoundPoints = (points: number) => {
     if (selectedPlayer) {
-      const updatedPlayers = players.map ((p) => p.name === selectedPlayer.name ? {...p, score: p.score + points} : p); 
+      const updatedPlayers = players.map ((p) => p.name === selectedPlayer.name ? {...p, score: p.score + points, roundScore: `+${points}`} : p); 
       onPointsUpdate([...updatedPlayers].sort((a, b) => a.score -  b.score))
+      animatePoints(selectedPlayer.name, selectedPlayer.score, selectedPlayer.score + points);
     }
   };
 
@@ -26,6 +37,22 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
     setSelectedPlayer(player);
     setIsPopupOpen(true);
   }
+
+  const animatePoints = (playerName: string, start: number, end: number) => {
+    let currentScore = start;
+    const increment = end > start ? 1 : -1;
+    const duration = Math.abs(end - start) * 20;
+    const interval = setInterval(() => {
+      currentScore += increment;
+      setDisplayedScores((prev) => ({
+        ...prev,
+        [playerName]: currentScore,
+      }));
+      if (currentScore === end) {
+        clearInterval(interval);
+      }
+    }, duration / Math.abs(end - start));
+  };
 
   return (
     <main>
@@ -39,7 +66,10 @@ const PointsRegistration: React.FC<PointsRegistrationProps> = ({ players, onPoin
               <tr className="rank-row" key={index}>
                   <td className="player-number">{index + 1}</td>
                   <td className="player-name">{player.name}</td>
-                  <td className="points">{player.score}</td>
+                  <td className="points">{displayedScores[player.name] !== undefined
+                    ? displayedScores[player.name]
+                    : player.score}</td>
+                  <td className='points-added'>{player.roundScore}</td>
                   <td className='submit'>
                   <button className='add' onClick={() => handlePointRegistration(player)}>+</button>
                   </td>
