@@ -2,8 +2,16 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: center;
 	padding: 2.5rem 2rem;
+}
+
+#header h1{
+	margin-right: 4rem; 
+}
+
+#header input{
+	margin-right: 1rem; 
 }
 
 .add-player{
